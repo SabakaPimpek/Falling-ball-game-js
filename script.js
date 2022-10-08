@@ -3,6 +3,7 @@ const game = document.querySelector('.main')
 let interval;
 let both = 0;
 let counter = 0;
+let gameTimer = 0.4;
 const currentBlocks = [];
 const score = document.querySelector('.score');
 
@@ -41,6 +42,7 @@ const blocks = setInterval(function(){
         alert("Game over. Score: "+(counter-5));
         clearInterval(blocks);
         location.reload();
+        gameTimer = 10;
     }
     for(var i = 0; i < currentBlocks.length;i++){
         let current = currentBlocks[i];
@@ -48,8 +50,8 @@ const blocks = setInterval(function(){
         let ihole = document.getElementById("hole"+current);
         let iblockTop = parseFloat(window.getComputedStyle(iblock).getPropertyValue("top"));
         let iholeLeft = parseFloat(window.getComputedStyle(ihole).getPropertyValue("left"));
-        iblock.style.top = iblockTop - 0.5 + "px";
-        ihole.style.top = iblockTop - 0.5 + "px";
+        iblock.style.top = iblockTop - gameTimer + "px";
+        ihole.style.top = iblockTop - gameTimer + "px";
         if(iblockTop < -20){
             currentBlocks.shift();
             iblock.remove();
@@ -57,7 +59,7 @@ const blocks = setInterval(function(){
         }
         if(iblockTop-20<characterTop && iblockTop>characterTop){
             drop++;
-            score.innerHTML = "Czas: " + (counter-5);
+            score.innerHTML = "Punkty: " + (counter-5);
             if(iholeLeft<=characterLeft && iholeLeft+20>=characterLeft){
                 drop = 0;
             }
@@ -65,10 +67,10 @@ const blocks = setInterval(function(){
     }
     if(drop==0){
         if(characterTop < 480){
-            character.style.top = characterTop + 2 + "px";
+            character.style.top = characterTop + (2) + "px";
         }
     }else{
-        character.style.top = characterTop - 0.5 + "px";
+        character.style.top = characterTop - gameTimer + "px";
     }
 },1);
 
@@ -83,6 +85,8 @@ function moveRight(){
     if(left<380) character.style.left = left + 2 + "px";
 }
 
+//Sterowanie klawiszami
+
 document.addEventListener("keydown", event => {
     if(both==0){
         both++;
@@ -94,7 +98,41 @@ document.addEventListener("keydown", event => {
         }
     }
 });
+
 document.addEventListener("keyup", event => {
     clearInterval(interval);
     both=0;
 });
+
+//Sterowanie dotykiem
+
+const touchLeft = document.querySelector(".left");
+const touchRight = document.querySelector(".right");
+
+if(both==0){
+    touchLeft.addEventListener("touchstart", event => {
+        both++;
+        interval = setInterval(moveLeft, 1);
+    })
+    
+    touchRight.addEventListener("touchstart", event => {
+        both++;
+        interval = setInterval(moveRight, 1);
+    })
+}
+
+touchLeft.addEventListener("touchend", event => {
+    clearInterval(interval);
+    both=0;
+});
+
+touchRight.addEventListener("touchend", event => {
+    clearInterval(interval);
+    both=0;
+});
+
+//--------------------------
+
+setInterval(() => {
+    gameTimer += 0.01;
+}, 1000);
