@@ -76,11 +76,13 @@ const blocks = setInterval(function(){
 
 function moveLeft()
 {
+    both++;
     let left = parseInt(window.getComputedStyle(character).getPropertyValue("left"));
     if(left>0) character.style.left = left - 2 + "px";
 }
 
 function moveRight(){
+    both++;
     let left = parseInt(window.getComputedStyle(character).getPropertyValue("left"));
     if(left<380) character.style.left = left + 2 + "px";
 }
@@ -89,7 +91,6 @@ function moveRight(){
 
 document.addEventListener("keydown", event => {
     if(both==0){
-        both++;
         if(event.key==="ArrowLeft"){
             interval = setInterval(moveLeft, 1);
         }
@@ -110,23 +111,21 @@ const touchLeft = document.querySelector(".left");
 const touchRight = document.querySelector(".right");
 
 if(both==0){
-    touchLeft.addEventListener("mousedown", event => {
-        both++;
+    touchLeft.addEventListener("touchstart", event => {
         interval = setInterval(moveLeft, 1);
     })
     
-    touchRight.addEventListener("mousedown", event => {
-        both++;
+    touchRight.addEventListener("touchstart", event => {
         interval = setInterval(moveRight, 1);
     })
 }
 
-touchLeft.addEventListener("mouseup", event => {
+touchLeft.addEventListener("touchend", event => {
     clearInterval(interval);
     both=0;
 });
 
-touchRight.addEventListener("mouseup", event => {
+touchRight.addEventListener("touchend", event => {
     clearInterval(interval);
     both=0;
 });
