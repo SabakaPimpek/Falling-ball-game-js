@@ -6,6 +6,10 @@ let counter = 0;
 let gameTimer = 0.4;
 const currentBlocks = [];
 const score = document.querySelector('.score');
+const controls = {
+    left: false,
+    right: false
+}
 
 const blocks = setInterval(function(){
     let blockLast = document.getElementById("block"+(counter-1));
@@ -72,65 +76,75 @@ const blocks = setInterval(function(){
     }else{
         character.style.top = characterTop - gameTimer + "px";
     }
+
+    if(controls.left)
+    {
+        moveLeft();
+    }
+    else if(controls.right)
+    {
+        moveRight();
+    }
+    
 },1);
 
 function moveLeft()
 {
-    both++;
     let left = parseInt(window.getComputedStyle(character).getPropertyValue("left"));
     if(left>0) character.style.left = left - 2 + "px";
 }
 
 function moveRight(){
-    both++;
     let left = parseInt(window.getComputedStyle(character).getPropertyValue("left"));
     if(left<380) character.style.left = left + 2 + "px";
 }
 
-//Sterowanie klawiszami
+// Keyboard controls
 
 document.addEventListener("keydown", event => {
     if(both==0){
+        both++;
         if(event.key==="ArrowLeft"){
-            interval = setInterval(moveLeft, 1);
+            controls.left = true;
         }
         if(event.key==="ArrowRight"){
-            interval = setInterval(moveRight, 1);
+            controls.right = true;
         }
     }
 });
-
 document.addEventListener("keyup", event => {
-    clearInterval(interval);
+    controls.left = false;
+    controls.right = false;
     both=0;
 });
 
-//Sterowanie dotykiem
+// Touch controls
 
-const touchLeft = document.querySelector(".left");
-const touchRight = document.querySelector(".right");
+const leftTouch = document.querySelector(".left");
+const rightTouch = document.querySelector(".right");
 
-if(both==0){
-    touchLeft.addEventListener("touchstart", event => {
-        interval = setInterval(moveLeft, 1);
-    })
-    
-    touchRight.addEventListener("touchstart", event => {
-        interval = setInterval(moveRight, 1);
-    })
-}
+leftTouch.addEventListener("touchstart", event => {
+    controls.left = true;
+    event.preventDefault();
+})
 
-touchLeft.addEventListener("touchend", event => {
-    clearInterval(interval);
+rightTouch.addEventListener("touchstart", event => {
+    controls.right = true;
+    event.preventDefault();
+})
+
+leftTouch.addEventListener("touchend", event => {
+    controls.left = false;
     both=0;
 });
 
-touchRight.addEventListener("touchend", event => {
-    clearInterval(interval);
+rightTouch.addEventListener("touchend", event => {
+    controls.right = false;
     both=0;
 });
 
-//--------------------------
+//---------------------------------
+
 
 setInterval(() => {
     gameTimer += 0.01;
