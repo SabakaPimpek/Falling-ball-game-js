@@ -110,23 +110,23 @@ const touchLeft = document.querySelector(".left");
 const touchRight = document.querySelector(".right");
 
 if(both==0){
-    touchLeft.addEventListener("touchstart", event => {
+    touchLeft.addEventListener("mousedown", event => {
         both++;
         interval = setInterval(moveLeft, 1);
     })
     
-    touchRight.addEventListener("touchstart", event => {
+    touchRight.addEventListener("mousedown", event => {
         both++;
         interval = setInterval(moveRight, 1);
     })
 }
 
-touchLeft.addEventListener("touchend", event => {
+touchLeft.addEventListener("mouseup", event => {
     clearInterval(interval);
     both=0;
 });
 
-touchRight.addEventListener("touchend", event => {
+touchRight.addEventListener("mouseup", event => {
     clearInterval(interval);
     both=0;
 });
